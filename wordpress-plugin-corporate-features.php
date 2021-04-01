@@ -19,14 +19,13 @@ class Corp_Featured_Item extends WP_Widget {
 			)
 		);
 		add_action('admin_enqueue_scripts', array($this, 'mfc_assets'));
-		
 	}
 
 	public function mfc_assets()
 	{
 		wp_enqueue_script('media-upload');
 		wp_enqueue_script('thickbox');
-		wp_enqueue_script('media-upload', plugin_dir_url(__FILE__) . 'media-upload.js', array('jquery'));
+		wp_enqueue_script('corp-media-upload', plugin_dir_url(__FILE__) . 'corp-media-upload.js', array('jquery'));
 		wp_enqueue_style('thickbox');
 	}
 
@@ -62,7 +61,7 @@ class Corp_Featured_Item extends WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'image' ) ); ?>"><?php _e( 'Image:', 'text_domain' ); ?></label>
-			<a class="misha-upl" id="<?php echo esc_attr( $this->get_field_id( 'image' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'image' ) ); ?>" value="<?php echo esc_attr( "abc" ); ?>" ?><button style="height: 40px; width:100%">Upload Image</button>
+			<a class="misha-upl" style="cursor:pointer;" id="<?php echo esc_attr( $this->get_field_id( 'image' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'image' ) ); ?>" value="<?php echo esc_attr( "image" ); ?>" ?><button style="height: 40px; width:100%">Upload Image</button>
 		</p>
 		
 	<?php }
@@ -92,7 +91,7 @@ class Corp_Featured_Item extends WP_Widget {
 		echo '<div class="item"><a href='.$link.' target="_blank" rel="noopener">
 				<figure>
 					<img src='.$image[0].' alt="Ontario School Screener Daily Screening Checklist" />
-					<figurecaption><h3>'.$title.'</h3></figurecaption>
+					<figurecaption><h3>'.$title[0].'</h3></figurecaption>
 				</figure>
 				</a></div>';
 
