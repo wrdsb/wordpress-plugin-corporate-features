@@ -26,7 +26,7 @@ class Corp_Featured_Item extends WP_Widget {
 	{
 		wp_enqueue_script('media-upload');
 		wp_enqueue_script('thickbox');
-		wp_enqueue_script('mfc-media-upload', plugin_dir_url(__FILE__) . 'mfc-media-upload.js', array('jquery'));
+		wp_enqueue_script('media-upload', plugin_dir_url(__FILE__) . 'media-upload.js', array('jquery'));
 		wp_enqueue_style('thickbox');
 	}
 
