@@ -53,15 +53,10 @@ class Corp_Featured_Item extends WP_Widget {
 			<input class="widefat" style="height:30px" id="<?php echo esc_attr( $this->get_field_id( 'link' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link' ) ); ?>" value="<?php echo esc_attr( $link ); ?>" ?>
 		</p>
 		
-		<?php 
-		
-		$image = wp_get_attachment_image( $image_id, 'medium', false, array( 'id' => 'myprefix-preview-image' ) );
-		
-		?>
-
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'image' ) ); ?>"><?php _e( 'Image:', 'text_domain' ); ?></label>
-			<a class="misha-upl" style="cursor:pointer;" id="<?php echo esc_attr( $this->get_field_id( 'image' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'image' ) ); ?>" value="<?php echo esc_attr( "image" ); ?>" ?><button style="height: 40px; width:100%">Upload Image</button>
+		<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'image' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'image' ) ); ?>" class="regular-text">
+		<input type="button" name="upload-btn-item" id="<?php echo esc_attr( $this->get_field_id( 'uploadBtn' ) ); ?>" class="button-secondary" value="Upload Image"></br></br>
+		<img id="<?php echo esc_attr( $this->get_field_id( 'previewImage' ) ); ?>" style="max-width:250px; max-height:250px; height: auto; width: auto;" src="<?php echo esc_attr( $image ); ?>">
 		</p>
 		
 	<?php }
@@ -84,19 +79,21 @@ class Corp_Featured_Item extends WP_Widget {
 		$image    = isset( $instance['image'] ) ? $instance['image']  : '';
 		$title     = isset( $instance['title'] ) ? $instance['title'] : '';
 		$link = isset( $instance['link'] ) ?$instance['link'] : '';
-
-		// WordPress core before_widget hook (always include )
+		if($image!='' && $title!="" && $link !=''){
+			// WordPress core before_widget hook (always include )
 		echo $before_widget;
 
 		echo '<div class="item"><a href='.$link.' target="_blank" rel="noopener">
 				<figure>
-					<img src='.$image[0].' alt="Ontario School Screener Daily Screening Checklist" />
-					<figurecaption><h3>'.$title[0].'</h3></figurecaption>
+					<img src='.$image.' alt="Ontario School Screener Daily Screening Checklist" />
+					<figurecaption><h3>'.$title.'</h3></figurecaption>
 				</figure>
 				</a></div>';
 
 		// WordPress core after_widget hook (always include )
 		echo $after_widget;
+		}
+		
 
 	}
 
@@ -120,7 +117,7 @@ class Corp_Quick_Links extends WP_Widget {
 
 		// Set widget defaults
 		$defaults = array(
-			'image'    => '',
+			'icon'    => '',
 			'title'     => '',
 			'link' => '',
 		);
@@ -137,38 +134,27 @@ class Corp_Quick_Links extends WP_Widget {
 		<?php // Link ?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'link' ) ); ?>"><?php _e( 'Link:', 'text_domain' ); ?></label>
-			<input class="widefat" style="height:30px" id="<?php echo esc_attr( $this->get_field_id( 'link' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link' ) ); ?>" value="<?php echo esc_attr( $link ); ?>" ?>
+			<input class="widefat" style="height:30px" id="<?php echo esc_attr( $this->get_field_id( 'link' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link' ) ); ?>" value="<?php echo esc_attr( $link ); ?>" />
 		</p>
 
-		<?php // Image ?>
-		<div>
+		<?php // Image?>
+		
 		<p>
-		<?php
-		if( $image = wp_get_attachment_image_src( $icon_id ) ) {
- 
-			echo '<a href="#" class="misha-upl"><img src="' . $icon[0] . '" /></a>
-				  <a href="#" class="misha-rmv">Remove image</a>
-				  <input type="hidden" name="misha-img" value="' . $icon_id . '">';
-		 
-		} else {
-		 
-			echo '<a href="#" class="misha-upl"><button style="height: 40px; width:100%">Upload Icon</button></a>
-				  <a href="#" class="misha-rmv" style="display:none">Remove image</a>
-				  <input type="hidden" name="misha-img" value="">';
-		 
-		}
-		 ?>
-		 </p>
-		</div>
+		<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'icon' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'icon' ) ); ?>" class="regular-text">
+		<input type="button" name="uploadBtn" class="uploadBtn" id="<?php echo esc_attr( $this->get_field_id( 'uploadBtn' ) ); ?>" class="button-secondary" value="Upload Image"></br></br>
+		<img id="<?php echo esc_attr( $this->get_field_id( 'previewImage' ) ); ?>" style="max-width:250px; max-height:250px; height: auto; width: auto;" src="<?php echo esc_attr( $icon ); ?>">
+		</p>
+		
+		
 	<?php }
 
 	// Update widget settings
 	public function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
-		$instance['image']    = isset( $new_instance['image'] ) ? wp_strip_all_tags( $new_instance['image'] ) : '';
+		$instance['icon']    = isset( $new_instance['icon'] ) ? wp_strip_all_tags( $new_instance['icon'] ) : '';
 		$instance['title']     = isset( $new_instance['title'] ) ? wp_strip_all_tags( $new_instance['title'] ) : '';
 		$instance['link'] = isset( $new_instance['link'] ) ? wp_kses_post( $new_instance['link'] ) : '';
-		return $instance;
+		return $new_instance;
 	}
 
 	// Display the widget
@@ -177,18 +163,17 @@ class Corp_Quick_Links extends WP_Widget {
 		extract( $args );
 
 		// Check the widget options
-		$image    = isset( $instance['image'] ) ? apply_filters( 'widget_title', $instance['image'] ) : '';
+		$icon    = isset( $instance['icon'] ) ? $instance['icon'] : '';;
 		$title     = isset( $instance['title'] ) ? $instance['title'] : '';
-		$link = isset( $instance['link'] ) ?$instance['link'] : '';
-
-		// WordPress core before_widget hook (always include )
+		$link = isset( $instance['link'] ) ? $instance['link'] : '';
+		if($icon!='' && $title!='' && $link!=''){
+			// WordPress core before_widget hook (always include )
 		echo $before_widget;
-
 		// Display the widget
 		echo '<div class="quicklink">
 				<a href='.$link.'>
 				<figure>
-					<img src='.$image.' alt="" />
+					<img src='.$icon.' alt="" />
 					<figurecaption>'.$title.'</figurecaption>
 				</figure>
 				</a>
@@ -196,6 +181,8 @@ class Corp_Quick_Links extends WP_Widget {
 
 		// WordPress core after_widget hook (always include )
 		echo $after_widget;
+		}
+		
 
 	}
 
@@ -264,20 +251,23 @@ class Corp_Featured_Video extends WP_Widget {
 		$video    = isset( $instance['video'] ) ?  $instance['video'] : '';
 		$title     = isset( $instance['title'] ) ? $instance['title'] : '';
 		$description = isset( $instance['description'] ) ?$instance['description'] : '';
-
-		// WordPress core before_widget hook (always include )
-		echo $before_widget;
-
-		// Display the widget
-		echo '<iframe style="margin-top: 8px;" width="100%" height="200" src='.$video.' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-			<h3>'.$title.'</h3>
-
-			<p>'.$description.'</p>';
-
-		// WordPress core after_widget hook (always include )
-		echo $after_widget;
-
+		if($video!='' && $title!='' && $description!=''){
+			echo $before_widget;
+			list($a,$url)=explode('=', $video);
+			$embedUrl = "https://youtube.com/embed/".$url;
+			if(strpos($video, 'embed')==true){
+				$embedUrl=$video;
+			}
+			// Display the widget
+			echo '<iframe style="margin-top: 8px;" width="100%" height="200" src='.$embedUrl.' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	
+				<h3>'.$title.'</h3>
+	
+				<p>'.$description.'</p>';
+	
+			// WordPress core after_widget hook (always include )
+			echo $after_widget;
+		}
 	}
 
 }
