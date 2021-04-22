@@ -18,7 +18,8 @@ class Corp_Featured_Item extends WP_Widget {
 				'customize_selective_refresh' => true,
 			)
 		);
-		add_action('admin_enqueue_scripts', array($this, 'mfc_assets'));
+		if ( is_active_widget() )
+			add_action('admin_enqueue_scripts', array($this, 'mfc_assets'));
 	}
 
 	public function mfc_assets()
